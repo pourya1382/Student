@@ -17,19 +17,16 @@ public class StudentService {
     }
 
 
-
     public List<Student> getStudent() {
         return studentRepository.findAll();
     }
-    public static void addNewStudent(Student student) {
+
+    public Student addNewStudent(Student student) {
         Optional<Student> studentOptional = studentRepository.findStudentByID(student.getId());
-        if (studentOptional.isPresent()){
+        if (studentOptional.isPresent()) {
             System.out.println("email taken!");
-        }else {
-            studentRepository.save(student);
         }
-
-
+        return studentRepository.save(student);
     }
 
 
@@ -40,21 +37,27 @@ public class StudentService {
         }
         studentRepository.deleteById(studentId);
     }
+
     @Transactional
-    public void updateStudentById(Long studentId, String name, String email) {
+    public Student updateStudentById(
+            Long studentId,
+            String name,
+            String email
+    ) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(()-> new IllegalStateException(
-                        "student with id "+studentId+" does not exist!"
+                .orElseThrow(() -> new IllegalStateException(
+                        "student with id " + studentId + " does not exist!"
                 ));
-        if (name != null && name.length()>0 && !Objects.equals(student.getName(),name)) {
+        if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)) {
             student.setName(name);
         }
-        if (email != null && email.length()>0&&Objects.equals(student.getEmail(),email)) {
+        if (email != null && email.length() > 0 && Objects.equals(student.getEmail(), email)) {
             Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
             if (studentOptional.isPresent()) {
                 throw new IllegalStateException("email taken");
             }
             student.setEmail(email);
         }
+        return studentRepository.save(student);
     }
 }

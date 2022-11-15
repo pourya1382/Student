@@ -27,7 +27,7 @@ public class Student {
     public Student() {
     }
 
-    public Student(Long id,String name,  String email, LocalDate dob) {
+    public Student(Long id, String name, String email, LocalDate dob) {
         this.name = name;
         this.id = id;
         this.email = email;
@@ -77,7 +77,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return Period.between(this.dob,LocalDate.now()).getYears();
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
 
     @Override
